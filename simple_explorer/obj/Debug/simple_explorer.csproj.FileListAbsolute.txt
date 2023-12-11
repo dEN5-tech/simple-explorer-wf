@@ -8,3 +8,15 @@ D:\projects\csharp_projects\simple_explorer\bin\Debug\simple_explorer.exe
 D:\projects\csharp_projects\simple_explorer\bin\Debug\simple_explorer.pdb
 D:\projects\csharp_projects\simple_explorer\obj\Debug\simple_explorer.exe
 D:\projects\csharp_projects\simple_explorer\obj\Debug\simple_explorer.pdb
+D:\projects\csharp_projects\simple-explorer-wf\simple_explorer\bin\Debug\simple_explorer.exe.config
+D:\projects\csharp_projects\simple-explorer-wf\simple_explorer\bin\Debug\simple_explorer.exe
+D:\projects\csharp_projects\simple-explorer-wf\simple_explorer\bin\Debug\simple_explorer.pdb
+D:\projects\csharp_projects\simple-explorer-wf\simple_explorer\bin\Debug\FontAwesome.Sharp.dll
+D:\projects\csharp_projects\simple-explorer-wf\simple_explorer\obj\Debug\simple_explorer.csproj.AssemblyReference.cache
+D:\projects\csharp_projects\simple-explorer-wf\simple_explorer\obj\Debug\simpleExplorer.Simple_explorer.resources
+D:\projects\csharp_projects\simple-explorer-wf\simple_explorer\obj\Debug\simple_explorer.Properties.Resources.resources
+D:\projects\csharp_projects\simple-explorer-wf\simple_explorer\obj\Debug\simple_explorer.csproj.GenerateResource.cache
+D:\projects\csharp_projects\simple-explorer-wf\simple_explorer\obj\Debug\simple_explorer.csproj.CoreCompileInputs.cache
+D:\projects\csharp_projects\simple-explorer-wf\simple_explorer\obj\Debug\simple_explorer.csproj.CopyComplete
+D:\projects\csharp_projects\simple-explorer-wf\simple_explorer\obj\Debug\simple_explorer.exe
+D:\projects\csharp_projects\simple-explorer-wf\simple_explorer\obj\Debug\simple_explorer.pdb

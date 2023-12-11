@@ -9,7 +9,7 @@
 //------------------------------------------------------------------------------
 
 
-namespace simple_explorer.Properties
+namespace simpleExplorer.Properties
 {
     /// <summary>
     ///   Класс ресурсов со строгим типом для поиска локализованных строк и пр.

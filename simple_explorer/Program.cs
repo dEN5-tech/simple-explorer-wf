@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace simple_explorer
+namespace simpleExplorer
 {
     static class Program
     {
@@ -16,7 +16,7 @@ namespace simple_explorer
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new simple_explorer());
+            Application.Run(new simpleExplorer.Simple_explorer());
         }
     }
 }
