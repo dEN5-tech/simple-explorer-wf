@@ -41,6 +41,7 @@ namespace simpleExplorer
             this.navBarFileButton = new System.Windows.Forms.Button();
             this.folderListBox = new System.Windows.Forms.ListBox();
             this.navBarPrevButton = new System.Windows.Forms.Button();
+            this.navBarArchiveButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // listBox1
@@ -125,7 +126,7 @@ namespace simpleExplorer
             this.headerLabel.ForeColor = System.Drawing.Color.White;
             this.headerLabel.Location = new System.Drawing.Point(0, 0);
             this.headerLabel.Name = "headerLabel";
-            this.headerLabel.Size = new System.Drawing.Size(400, 50);
+            this.headerLabel.Size = new System.Drawing.Size(428, 50);
             this.headerLabel.TabIndex = 4;
             this.headerLabel.Text = "Explorer";
             this.headerLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -138,7 +139,7 @@ namespace simpleExplorer
             this.navBarHomeButton.ForeColor = System.Drawing.Color.White;
             this.navBarHomeButton.Location = new System.Drawing.Point(0, 50);
             this.navBarHomeButton.Name = "navBarHomeButton";
-            this.navBarHomeButton.Size = new System.Drawing.Size(115, 30);
+            this.navBarHomeButton.Size = new System.Drawing.Size(110, 30);
             this.navBarHomeButton.TabIndex = 3;
             this.navBarHomeButton.Text = "Главная";
             this.navBarHomeButton.UseVisualStyleBackColor = false;
@@ -150,9 +151,9 @@ namespace simpleExplorer
             this.navBarFileButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.navBarFileButton.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.navBarFileButton.ForeColor = System.Drawing.Color.White;
-            this.navBarFileButton.Location = new System.Drawing.Point(115, 50);
+            this.navBarFileButton.Location = new System.Drawing.Point(106, 50);
             this.navBarFileButton.Name = "navBarFileButton";
-            this.navBarFileButton.Size = new System.Drawing.Size(115, 30);
+            this.navBarFileButton.Size = new System.Drawing.Size(110, 30);
             this.navBarFileButton.TabIndex = 2;
             this.navBarFileButton.Text = "Папка";
             this.navBarFileButton.UseVisualStyleBackColor = false;
@@ -166,7 +167,7 @@ namespace simpleExplorer
             this.folderListBox.ForeColor = System.Drawing.Color.Black;
             this.folderListBox.FormattingEnabled = true;
             this.folderListBox.ItemHeight = 21;
-            this.folderListBox.Location = new System.Drawing.Point(0, 80);
+            this.folderListBox.Location = new System.Drawing.Point(0, 97);
             this.folderListBox.Name = "folderListBox";
             this.folderListBox.Size = new System.Drawing.Size(120, 84);
             this.folderListBox.TabIndex = 1;
@@ -178,19 +179,34 @@ namespace simpleExplorer
             this.navBarPrevButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.navBarPrevButton.Font = new System.Drawing.Font("Segoe UI", 12F);
             this.navBarPrevButton.ForeColor = System.Drawing.Color.White;
-            this.navBarPrevButton.Location = new System.Drawing.Point(230, 50);
+            this.navBarPrevButton.Location = new System.Drawing.Point(212, 50);
             this.navBarPrevButton.Name = "navBarPrevButton";
-            this.navBarPrevButton.Size = new System.Drawing.Size(115, 30);
+            this.navBarPrevButton.Size = new System.Drawing.Size(110, 30);
             this.navBarPrevButton.TabIndex = 2;
             this.navBarPrevButton.Text = "Назад";
             this.navBarPrevButton.UseVisualStyleBackColor = false;
             this.navBarPrevButton.Click += new System.EventHandler(this.OnPrevButtonClick);
             // 
+            // navBarArchiveButton
+            // 
+            this.navBarArchiveButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(254)))), ((int)(((byte)(156)))), ((int)(((byte)(74)))));
+            this.navBarArchiveButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.navBarArchiveButton.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.navBarArchiveButton.ForeColor = System.Drawing.Color.White;
+            this.navBarArchiveButton.Location = new System.Drawing.Point(318, 50);
+            this.navBarArchiveButton.Name = "navBarArchiveButton";
+            this.navBarArchiveButton.Size = new System.Drawing.Size(110, 30);
+            this.navBarArchiveButton.TabIndex = 2;
+            this.navBarArchiveButton.Text = "Архив";
+            this.navBarArchiveButton.UseVisualStyleBackColor = false;
+            this.navBarArchiveButton.Click += new System.EventHandler(this.OnNavBarArchiveButtonClick);
+            // 
             // Simple_explorer
             // 
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(251)))), ((int)(((byte)(245)))), ((int)(((byte)(238)))));
-            this.ClientSize = new System.Drawing.Size(400, 270);
+            this.ClientSize = new System.Drawing.Size(427, 270);
             this.Controls.Add(this.folderListBox);
+            this.Controls.Add(this.navBarArchiveButton);
             this.Controls.Add(this.navBarPrevButton);
             this.Controls.Add(this.navBarFileButton);
             this.Controls.Add(this.navBarHomeButton);
@@ -214,5 +230,6 @@ namespace simpleExplorer
         private System.Windows.Forms.Button navBarFileButton;
         private System.Windows.Forms.ListBox folderListBox;
         private System.Windows.Forms.Button navBarPrevButton;
+        private System.Windows.Forms.Button navBarArchiveButton;
     }
 }
