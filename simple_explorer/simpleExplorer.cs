@@ -15,20 +15,10 @@ namespace simpleExplorer
     {
         private bool ctrlKeyPressed = false;
 
-        private ListBox lastSelectedListBox;
+        private ListView lastSelectedListView;
 
         private StringCollection clipboardPaths;
 
-        public class FolderListItem
-        {
-            public string Title { get; set; }
-            public Image Icon { get; set; }
-
-            public override string ToString()
-            {
-                return Title;
-            }
-        }
 
 
         private readonly string mainDirectory = @"C:\"; // Set your main directory here
@@ -49,16 +39,38 @@ namespace simpleExplorer
 
             // Set the maximum width of the navBarPanel
             this.navBarPanel.MaximumSize = new System.Drawing.Size(maxPanelWidth, this.navBarPanel.Height);
+            this.navBarPanel.Width = this.ClientSize.Width;
+            this.headerLabel.Width = this.ClientSize.Width;
+
+            int headerHeight = headerLabel.Height;
+            int navButtonHeight = navBarPanel.Height;
+
+            // Calculate the desired height for folderListBox
+            int desiredHeight = headerHeight + navButtonHeight;
+
+            // Subtract the desired height from the total height of the form
+            int newHeight = this.Height - desiredHeight;
+
+            // Set the size and position of folderListBox
+            folderListView.Size = new System.Drawing.Size(this.Width / 2 - 10, newHeight - 20);
+            folderListView.Location = new Point(0, headerHeight + navButtonHeight);
+
+            // Set the size and position of twoFolderListBox
+            twoFolderListView.Size = new System.Drawing.Size(this.Width / 2 - 10, newHeight - 20);
+            twoFolderListView.Location = new Point(this.Width / 2, headerHeight + navButtonHeight);
+
+            this.columnHeader1.Width = this.folderListView.Width;
+            this.columnHeader2.Width = this.twoFolderListView.Width;
         }
 
         private void OnFolderListBoxClick(object sender, EventArgs e)
         {
-            lastSelectedListBox = folderListBox;
+            lastSelectedListView = folderListView;
         }
 
         private void OnTwoFolderListBoxClick(object sender, EventArgs e)
         {
-            lastSelectedListBox = twoFolderListBox;
+            lastSelectedListView = twoFolderListView;
         }
 
 
@@ -77,14 +89,22 @@ namespace simpleExplorer
         }
 
         // Event handler for double-clicking on a listbox item
-        private void OnListboxDoubleClick(object sender, EventArgs e)
+        private void OnListViewDoubleClick(object sender, EventArgs e)
         {
-            if (lastSelectedListBox != null)
+            if (lastSelectedListView != null)
             {
-                int selectedIndex = lastSelectedListBox.SelectedIndex;
+                int selectedIndex = lastSelectedListView.SelectedIndices.Count > 0 ? lastSelectedListView.SelectedIndices[0] : -1;
                 if (selectedIndex >= 0)
                 {
-                    string selectedDirectory = ((FolderListItem)lastSelectedListBox.Items[selectedIndex]).Title;
+                    // Assuming the first column contains the directory name
+                    string selectedDirectory = lastSelectedListView.Items[selectedIndex].SubItems[0].Text;
+
+                    // Check if the selected item is of type ListViewItem
+                    if (lastSelectedListView.Items[selectedIndex].Tag is ListViewItem selectedItem)
+                    {
+                        selectedDirectory = selectedItem.Text;
+                    }
+
                     string currentPath = pathEntry.Text;
                     string newPath = Path.Combine(currentPath, selectedDirectory);
                     pathEntry.Text = newPath;
@@ -94,9 +114,11 @@ namespace simpleExplorer
         }
 
 
-        private void RenderListBoxContents(ListBox listBox, string path)
+
+
+        private void RenderListBoxContents(ListView listView, string path)
         {
-            listBox.Items.Clear(); // Clear existing items
+            listView.Items.Clear(); // Clear existing items
 
             try
             {
@@ -122,7 +144,7 @@ namespace simpleExplorer
                     {
                         string parentFolderName = Path.GetFileName(Path.GetDirectoryName(path));
                         Image folderIcon = GetIconImage(IconChar.Folder);
-                        listBox.Items.Add(new FolderListItem { Title = ".." + parentFolderName, Icon = folderIcon });
+                        listView.Items.Add(new ListViewItem { Text = ".." + parentFolderName});
                     }
 
                     // Add directories to the listBox with folder icon
@@ -130,7 +152,7 @@ namespace simpleExplorer
                     {
                         string folderName = Path.GetFileName(directory);
                         Image folderIcon = GetIconImage(IconChar.Folder);
-                        listBox.Items.Add(new FolderListItem { Title = folderName, Icon = folderIcon });
+                        listView.Items.Add(new ListViewItem { Text = folderName});
                     }
 
                     // Add files to the listBox with file icon
@@ -138,7 +160,7 @@ namespace simpleExplorer
                     {
                         string fileName = Path.GetFileName(file);
                         Image fileIcon = GetIconImage(IconChar.File);
-                        listBox.Items.Add(new FolderListItem { Title = fileName, Icon = fileIcon });
+                        listView.Items.Add(new ListViewItem { Text = fileName});
                     }
                 }
             }
@@ -155,7 +177,7 @@ namespace simpleExplorer
         // Method to show the contents of a directory
         private void ShowDirectoryContents(string path)
         {
-            lastSelectedListBox.Items.Clear(); // Clear existing items
+            lastSelectedListView.Items.Clear(); // Clear existing items
 
             try
             {
@@ -181,23 +203,23 @@ namespace simpleExplorer
                     {
                         string parentFolderName = Path.GetFileName(Path.GetDirectoryName(path));
                         Image folderIcon = GetIconImage(IconChar.Folder);
-                        lastSelectedListBox.Items.Add(new FolderListItem { Title = ".." + parentFolderName, Icon = folderIcon });
+                        lastSelectedListView.Items.Add(new ListViewItem { Text = ".." + parentFolderName});
                     }
 
-                    // Add directories to the lastSelectedListBox with folder icon
+                    // Add directories to the lastSelectedListView with folder icon
                     foreach (string directory in directories)
                     {
                         string folderName = Path.GetFileName(directory);
                         Image folderIcon = GetIconImage(IconChar.Folder);
-                        lastSelectedListBox.Items.Add(new FolderListItem { Title = folderName, Icon = folderIcon });
+                        lastSelectedListView.Items.Add(new ListViewItem { Text = folderName});
                     }
 
-                    // Add files to the lastSelectedListBox with file icon
+                    // Add files to the lastSelectedListView with file icon
                     foreach (string file in files)
                     {
                         string fileName = Path.GetFileName(file);
                         Image fileIcon = GetIconImage(IconChar.File);
-                        lastSelectedListBox.Items.Add(new FolderListItem { Title = fileName, Icon = fileIcon });
+                        lastSelectedListView.Items.Add(new ListViewItem { Text = fileName});
                     }
                 }
             }
@@ -236,8 +258,8 @@ namespace simpleExplorer
 
                         Image entryIcon = GetIconImage(IconChar.File); // You may customize the icon
 
-                        folderListBox.Items.Add(new FolderListItem { Title = entryName, Icon = entryIcon });
-                        twoFolderListBox.Items.Add(new FolderListItem { Title = entryName, Icon = entryIcon });
+                        folderListView.Items.Add(new ListViewItem { Text = entryName});
+                        twoFolderListView.Items.Add(new ListViewItem { Text = entryName});
                     }
                 }
             }
@@ -258,23 +280,6 @@ namespace simpleExplorer
 
 
         // Event handler for the folder list draw item
-        private void OnFolderListDrawItem(object sender, DrawItemEventArgs e)
-        {
-            if (e.Index >= 0 && e.Index < folderListBox.Items.Count)
-            {
-                e.DrawBackground();
-
-                FolderListItem listItem = (FolderListItem)folderListBox.Items[e.Index];
-
-                // Draw the icon
-                e.Graphics.DrawImage(listItem.Icon, e.Bounds.Left, e.Bounds.Top);
-
-                // Draw the title
-                e.Graphics.DrawString(listItem.Title, e.Font, Brushes.Black, e.Bounds.Left + listItem.Icon.Width, e.Bounds.Top);
-
-                e.DrawFocusRectangle();
-            }
-        }
 
         // Method to get the icon image for a given FontAwesome icon
         private Image GetIconImage(IconChar icon)
@@ -288,17 +293,6 @@ namespace simpleExplorer
             return iconWithPadding;
         }
 
-        // Event handler for the folder list measure item
-        private void OnFolderListMeasureItem(object sender, MeasureItemEventArgs e)
-        {
-            if (e.Index >= 0)
-            {
-                FolderListItem listItem = (FolderListItem)folderListBox.Items[e.Index];
-
-                // Set the height based on the icon height
-                e.ItemHeight = Math.Max(listItem.Icon.Height, e.ItemHeight);
-            }
-        }
 
         // Event handler for the Previous button click
         private void OnPrevButtonClick(object sender, EventArgs e)
@@ -318,24 +312,23 @@ namespace simpleExplorer
         // Event handler for the folder list selection change
         private void OnFolderListSelectedIndexChanged(object sender, EventArgs e)
         {
-             
-
             if (ctrlKeyPressed)
             {
                 // If Ctrl key is pressed, handle multiple item selection
                 // You may want to customize this behavior based on your requirements
-                folderListBox.SelectionMode = SelectionMode.MultiExtended;
+                lastSelectedListView.MultiSelect = true;
             }
             else
             {
                 // If Ctrl key is not pressed, handle single item selection
-                folderListBox.SelectionMode = SelectionMode.One;
+                lastSelectedListView.MultiSelect = false;
             }
 
-            int selectedIndex = folderListBox.SelectedIndex;
+            int selectedIndex = lastSelectedListView.SelectedIndices.Count > 0 ? lastSelectedListView.SelectedIndices[0] : -1;
             if (selectedIndex >= 0 && !ctrlKeyPressed)
             {
-                string selectedDirectory = ((FolderListItem)folderListBox.Items[selectedIndex]).Title;
+                ListViewItem selectedItem = lastSelectedListView.SelectedItems[0];
+                string selectedDirectory = selectedItem.Text; // Assuming the first column contains the directory name
                 string currentPath = pathEntry.Text;
                 string newPath = Path.Combine(currentPath, selectedDirectory);
                 pathEntry.Text = newPath;
@@ -345,30 +338,30 @@ namespace simpleExplorer
 
         private void OnTwoFolderListSelectedIndexChanged(object sender, EventArgs e)
         {
-             
-
             if (ctrlKeyPressed)
             {
                 // If Ctrl key is pressed, handle multiple item selection
                 // You may want to customize this behavior based on your requirements
-                folderListBox.SelectionMode = SelectionMode.MultiExtended;
+                lastSelectedListView.MultiSelect = true;
             }
             else
             {
                 // If Ctrl key is not pressed, handle single item selection
-                folderListBox.SelectionMode = SelectionMode.One;
+                lastSelectedListView.MultiSelect = false;
             }
 
-            int selectedIndex = folderListBox.SelectedIndex;
+            int selectedIndex = lastSelectedListView.SelectedIndices.Count > 0 ? lastSelectedListView.SelectedIndices[0] : -1;
             if (selectedIndex >= 0 && !ctrlKeyPressed)
             {
-                string selectedDirectory = ((FolderListItem)folderListBox.Items[selectedIndex]).Title;
+                ListViewItem selectedItem = lastSelectedListView.SelectedItems[0];
+                string selectedDirectory = selectedItem.Text; // Assuming the first column contains the directory name
                 string currentPath = pathEntry.Text;
                 string newPath = Path.Combine(currentPath, selectedDirectory);
                 pathEntry.Text = newPath;
                 ShowDirectoryContents(newPath);
             }
         }
+
 
         // Event handler for the folder list key down
         private void OnFolderListKeyDown(object sender, KeyEventArgs e)
@@ -389,7 +382,7 @@ namespace simpleExplorer
         {
             // Call your archive files logic here
             // You can use folderListBox.SelectedItems to get the selected items
-            if (lastSelectedListBox.SelectedItems.Count > 0)
+            if (lastSelectedListView.SelectedItems.Count > 0)
             {
                 // Prompt the user to select a destination for the zip file
                 using (var saveFileDialog = new SaveFileDialog())
@@ -401,17 +394,17 @@ namespace simpleExplorer
                         // Create a zip archive
                         using (var zipArchive = ZipFile.Open(saveFileDialog.FileName, ZipArchiveMode.Create))
                         {
-                            foreach (var selectedItem in lastSelectedListBox.SelectedItems)
+                            foreach (var selectedItem in lastSelectedListView.SelectedItems)
                             {
                                 // Process each selected item
                                 // For example, you can get the title and add it to the zip archive
-                                string selectedTitle = ((FolderListItem)selectedItem).Title;
-                                string fullPath = Path.Combine(pathEntry.Text, selectedTitle);
+                                string selectedText = ((ListViewItem)selectedItem).Text;
+                                string fullPath = Path.Combine(pathEntry.Text, selectedText);
 
                                 if (File.Exists(fullPath))
                                 {
                                     // Add the file to the archive
-                                    zipArchive.CreateEntryFromFile(fullPath, selectedTitle);
+                                    zipArchive.CreateEntryFromFile(fullPath, selectedText);
                                 }
                                 else if (Directory.Exists(fullPath))
                                 {
@@ -458,29 +451,25 @@ namespace simpleExplorer
             int newHeight = this.Height - desiredHeight;
 
             // Set the size and position of folderListBox
-            folderListBox.Size = new System.Drawing.Size(this.Width / 2 - 10, newHeight - 20);
-            folderListBox.Location = new Point(0, headerHeight + navButtonHeight);
+            folderListView.Size = new System.Drawing.Size(this.Width / 2 - 10, newHeight - 20);
+            folderListView.Location = new Point(0, headerHeight + navButtonHeight);
 
             // Set the size and position of twoFolderListBox
-            twoFolderListBox.Size = new System.Drawing.Size(this.Width / 2 - 10, newHeight - 20);
-            twoFolderListBox.Location = new Point(this.Width / 2, headerHeight + navButtonHeight);
+            twoFolderListView.Size = new System.Drawing.Size(this.Width / 2 - 10, newHeight - 20);
+            twoFolderListView.Location = new Point(this.Width / 2, headerHeight + navButtonHeight);
+
+            this.columnHeader1.Width = this.folderListView.Width;
+            this.columnHeader2.Width = this.twoFolderListView.Width;
 
 
 
-            folderListBox.Enter += OnFolderListBoxClick;
-            twoFolderListBox.Enter += OnTwoFolderListBoxClick;
+            folderListView.Enter += OnFolderListBoxClick;
+            twoFolderListView.Enter += OnTwoFolderListBoxClick;
 
+            
 
-            this.folderListBox.DrawMode = DrawMode.OwnerDrawFixed;
-            this.folderListBox.DrawItem += OnFolderListDrawItem;
-            this.folderListBox.MeasureItem += OnFolderListMeasureItem;
-
-            this.twoFolderListBox.DrawMode = DrawMode.OwnerDrawFixed;
-            this.twoFolderListBox.DrawItem += OnFolderListDrawItem;
-            this.twoFolderListBox.MeasureItem += OnFolderListMeasureItem;
-
-            folderListBox.KeyDown += OnFolderListKeyDown;
-            folderListBox.KeyUp += OnFolderListKeyUp;
+            folderListView.KeyDown += OnFolderListKeyDown;
+            folderListView.KeyUp += OnFolderListKeyUp;
 
             // Set up the icon image for the Home button
             var homeIcon = IconChar.Home;
@@ -531,8 +520,8 @@ namespace simpleExplorer
 
             // Set the main directory when the form loads
             pathEntry.Text = mainDirectory;
-            RenderListBoxContents(folderListBox, mainDirectory);
-            RenderListBoxContents(twoFolderListBox, mainDirectory);
+            RenderListBoxContents(folderListView, mainDirectory);
+            RenderListBoxContents(twoFolderListView, mainDirectory);
 
             // Align icon and text in the buttons
             navBarHomeButton.TextImageRelation = TextImageRelation.ImageBeforeText;
@@ -575,7 +564,7 @@ namespace simpleExplorer
         {
             // Call your unpack logic here
             // You can use folderListBox.SelectedItems to get the selected items
-            if (lastSelectedListBox.SelectedItems.Count > 0)
+            if (lastSelectedListView.SelectedItems.Count > 0)
             {
                 // Prompt the user to select a destination for the unpacked files
                 using (var folderDialog = new FolderBrowserDialog())
@@ -585,17 +574,17 @@ namespace simpleExplorer
                     {
                         string destinationFolder = folderDialog.SelectedPath;
 
-                        foreach (var selectedItem in lastSelectedListBox.SelectedItems)
+                        foreach (var selectedItem in lastSelectedListView.SelectedItems)
                         {
                             // Process each selected item
                             // For example, you can get the title and extract it to the destination folder
-                            string selectedTitle = ((FolderListItem)selectedItem).Title;
-                            string fullPath = Path.Combine(pathEntry.Text, selectedTitle);
+                            string selectedText = ((ListViewItem)selectedItem).Text;
+                            string fullPath = Path.Combine(pathEntry.Text, selectedText);
 
                             if (IsZipArchive(fullPath))
                             {
                                 // If the selected item is a zip archive, extract its contents
-                                string extractFolder = Path.Combine(destinationFolder, Path.GetFileNameWithoutExtension(selectedTitle));
+                                string extractFolder = Path.Combine(destinationFolder, Path.GetFileNameWithoutExtension(selectedText));
 
                                 try
                                 {
@@ -603,7 +592,7 @@ namespace simpleExplorer
                                 }
                                 catch (Exception ex)
                                 {
-                                    MessageBox.Show($"Error extracting {selectedTitle}: {ex.Message}");
+                                    MessageBox.Show($"Error extracting {selectedText}: {ex.Message}");
                                 }
                             }
                             else
@@ -612,13 +601,13 @@ namespace simpleExplorer
                                 if (File.Exists(fullPath))
                                 {
                                     // Copy or move the file to the destination folder
-                                    string destinationPath = Path.Combine(destinationFolder, selectedTitle);
+                                    string destinationPath = Path.Combine(destinationFolder, selectedText);
                                     File.Copy(fullPath, destinationPath, true); // Use File.Move if you want to move instead of copy
                                 }
                                 else if (Directory.Exists(fullPath))
                                 {
                                     // Copy or move the entire directory to the destination folder
-                                    string destinationPath = Path.Combine(destinationFolder, selectedTitle);
+                                    string destinationPath = Path.Combine(destinationFolder, selectedText);
                                     CopyDirectory(fullPath, destinationPath); // Implement CopyDirectory method
                                 }
                             }
@@ -657,12 +646,12 @@ namespace simpleExplorer
 
         private void OnNavBarCopyButtonClick(object sender, EventArgs e)
         {
-            // Copy the selected items in lastSelectedListBox to the clipboard
+            // Copy the selected items in lastSelectedListView to the clipboard
             clipboardPaths.Clear();
-            foreach (var selectedItem in lastSelectedListBox.SelectedItems)
+            foreach (var selectedItem in lastSelectedListView.SelectedItems)
             {
-                string selectedTitle = ((FolderListItem)selectedItem).Title;
-                string fullPath = Path.Combine(pathEntry.Text, selectedTitle);
+                string selectedText = ((ListViewItem)selectedItem).Text;
+                string fullPath = Path.Combine(pathEntry.Text, selectedText);
                 clipboardPaths.Add(fullPath);
             }
 
@@ -672,7 +661,7 @@ namespace simpleExplorer
 
         private void OnNavBarPasteButtonClick(object sender, EventArgs e)
         {
-                // Paste the copied items from the clipboard to the selected directory in lastSelectedListBox
+                // Paste the copied items from the clipboard to the selected directory in lastSelectedListView
                 string destinationDirectory = pathEntry.Text;
 
                 if (clipboardPaths.Count > 0)
@@ -709,13 +698,13 @@ namespace simpleExplorer
                     MessageBox.Show("Буфер обмена пуст.");
                 }
 
-                // Refresh the contents of lastSelectedListBox after pasting
+                // Refresh the contents of lastSelectedListView after pasting
                 ShowDirectoryContents(destinationDirectory);
             }
 
         private void navBarDeleteButton_Click(object sender, EventArgs e)
         {
-            if (lastSelectedListBox.SelectedItems.Count > 0)
+            if (lastSelectedListView.SelectedItems.Count > 0)
             {
                 DialogResult result = MessageBox.Show("Вы уверены, что хотите удалить выбранные элементы?", "Удаление", MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
@@ -723,10 +712,10 @@ namespace simpleExplorer
                 {
                     try
                     {
-                        foreach (var selectedItem in lastSelectedListBox.SelectedItems)
+                        foreach (var selectedItem in lastSelectedListView.SelectedItems)
                         {
-                            string selectedTitle = ((FolderListItem)selectedItem).Title;
-                            string fullPath = Path.Combine(pathEntry.Text, selectedTitle);
+                            string selectedText = ((ListViewItem)selectedItem).Text;
+                            string fullPath = Path.Combine(pathEntry.Text, selectedText);
 
                             if (File.Exists(fullPath))
                             {

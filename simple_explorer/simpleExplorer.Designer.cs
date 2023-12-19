@@ -30,6 +30,8 @@ namespace simpleExplorer
 
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Simple_explorer));
             this.listBox1 = new System.Windows.Forms.ListBox();
             this.pathEntry = new System.Windows.Forms.TextBox();
             this.listBox = new System.Windows.Forms.ListBox();
@@ -39,8 +41,9 @@ namespace simpleExplorer
             this.headerLabel = new System.Windows.Forms.Label();
             this.navBarHomeButton = new System.Windows.Forms.Button();
             this.navBarFileButton = new System.Windows.Forms.Button();
-            this.folderListBox = new System.Windows.Forms.ListBox();
-            this.twoFolderListBox = new System.Windows.Forms.ListBox();
+            this.folderListView = new System.Windows.Forms.ListView();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.twoFolderListView = new System.Windows.Forms.ListView();
             this.navBarPrevButton = new System.Windows.Forms.Button();
             this.navBarArchiveButton = new System.Windows.Forms.Button();
             this.navBarUnpackButton = new System.Windows.Forms.Button();
@@ -48,22 +51,17 @@ namespace simpleExplorer
             this.navBarCopyButton = new System.Windows.Forms.Button();
             this.navBarPasteButton = new System.Windows.Forms.Button();
             this.navBarDeleteButton = new System.Windows.Forms.Button();
+            this.ImageIcons = new System.Windows.Forms.ImageList(this.components);
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.navBarPanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // listBox1
             // 
-            this.listBox1.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.listBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listBox1.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.listBox1.ForeColor = System.Drawing.Color.Black;
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 17;
-            this.listBox1.Location = new System.Drawing.Point(12, 50);
+            this.listBox1.Location = new System.Drawing.Point(0, 0);
             this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(450, 450);
-            this.listBox1.TabIndex = 1;
-            this.listBox1.DoubleClick += new System.EventHandler(this.OnListboxDoubleClick);
+            this.listBox1.Size = new System.Drawing.Size(120, 96);
+            this.listBox1.TabIndex = 0;
             // 
             // pathEntry
             // 
@@ -78,17 +76,10 @@ namespace simpleExplorer
             // 
             // listBox
             // 
-            this.listBox.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.listBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listBox.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.listBox.ForeColor = System.Drawing.Color.Black;
-            this.listBox.FormattingEnabled = true;
-            this.listBox.ItemHeight = 17;
-            this.listBox.Location = new System.Drawing.Point(12, 50);
+            this.listBox.Location = new System.Drawing.Point(0, 0);
             this.listBox.Name = "listBox";
-            this.listBox.Size = new System.Drawing.Size(450, 450);
-            this.listBox.TabIndex = 3;
-            this.listBox.DoubleClick += new System.EventHandler(this.OnListboxDoubleClick);
+            this.listBox.Size = new System.Drawing.Size(120, 96);
+            this.listBox.TabIndex = 0;
             // 
             // prevButton
             // 
@@ -166,34 +157,46 @@ namespace simpleExplorer
             this.navBarFileButton.UseVisualStyleBackColor = false;
             this.navBarFileButton.Click += new System.EventHandler(this.OnBrowseButtonClick);
             // 
-            // folderListBox
+            // folderListView
             // 
-            this.folderListBox.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.folderListBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.folderListBox.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this.folderListBox.ForeColor = System.Drawing.Color.Black;
-            this.folderListBox.FormattingEnabled = true;
-            this.folderListBox.ItemHeight = 21;
-            this.folderListBox.Location = new System.Drawing.Point(0, 97);
-            this.folderListBox.Name = "folderListBox";
-            this.folderListBox.Size = new System.Drawing.Size(200, 294);
-            this.folderListBox.TabIndex = 1;
-            this.folderListBox.SelectedIndexChanged += new System.EventHandler(this.OnFolderListSelectedIndexChanged);
+            this.folderListView.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.folderListView.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.folderListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1});
+            this.folderListView.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.folderListView.ForeColor = System.Drawing.Color.Black;
+            this.folderListView.FullRowSelect = true;
+            this.folderListView.GridLines = true;
+            this.folderListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.folderListView.HideSelection = false;
+            this.folderListView.Location = new System.Drawing.Point(5, 121);
+            this.folderListView.Name = "folderListView";
+            this.folderListView.Size = new System.Drawing.Size(121, 97);
+            this.folderListView.TabIndex = 0;
+            this.folderListView.UseCompatibleStateImageBehavior = false;
+            this.folderListView.View = System.Windows.Forms.View.Details;
+            this.folderListView.SelectedIndexChanged += new System.EventHandler(this.OnFolderListSelectedIndexChanged);
             // 
-            // twoFolderListBox
+            // twoFolderListView
             // 
-            this.twoFolderListBox.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.twoFolderListBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.twoFolderListBox.Font = new System.Drawing.Font("Segoe UI", 12F);
-            this.twoFolderListBox.ForeColor = System.Drawing.Color.Black;
-            this.twoFolderListBox.FormattingEnabled = true;
-            this.twoFolderListBox.ItemHeight = 21;
-            this.twoFolderListBox.Location = new System.Drawing.Point(250, 97);
-            this.twoFolderListBox.Name = "twoFolderListBox";
-            this.twoFolderListBox.Size = new System.Drawing.Size(200, 294);
-            this.twoFolderListBox.TabIndex = 2;
-            this.twoFolderListBox.SelectedIndexChanged += new System.EventHandler(this.OnTwoFolderListSelectedIndexChanged);
-            this.twoFolderListBox.DoubleClick += new System.EventHandler(this.OnListboxDoubleClick);
+            this.twoFolderListView.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.twoFolderListView.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.twoFolderListView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader2});
+            this.twoFolderListView.Font = new System.Drawing.Font("Segoe UI", 12F);
+            this.twoFolderListView.ForeColor = System.Drawing.Color.Black;
+            this.twoFolderListView.FullRowSelect = true;
+            this.twoFolderListView.GridLines = true;
+            this.twoFolderListView.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.twoFolderListView.HideSelection = false;
+            this.twoFolderListView.Location = new System.Drawing.Point(132, 121);
+            this.twoFolderListView.Name = "twoFolderListView";
+            this.twoFolderListView.Size = new System.Drawing.Size(121, 97);
+            this.twoFolderListView.TabIndex = 1;
+            this.twoFolderListView.UseCompatibleStateImageBehavior = false;
+            this.twoFolderListView.View = System.Windows.Forms.View.Details;
+            this.twoFolderListView.SelectedIndexChanged += new System.EventHandler(this.OnTwoFolderListSelectedIndexChanged);
+            this.twoFolderListView.DoubleClick += new System.EventHandler(this.OnListViewDoubleClick);
             // 
             // navBarPrevButton
             // 
@@ -298,12 +301,18 @@ namespace simpleExplorer
             this.navBarDeleteButton.UseVisualStyleBackColor = false;
             this.navBarDeleteButton.Click += new System.EventHandler(this.navBarDeleteButton_Click);
             // 
+            // ImageIcons
+            // 
+            this.ImageIcons.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("ImageIcons.ImageStream")));
+            this.ImageIcons.TransparentColor = System.Drawing.Color.Transparent;
+            this.ImageIcons.Images.SetKeyName(0, "one");
+            // 
             // Simple_explorer
             // 
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(251)))), ((int)(((byte)(245)))), ((int)(((byte)(238)))));
             this.ClientSize = new System.Drawing.Size(520, 270);
-            this.Controls.Add(this.folderListBox);
-            this.Controls.Add(this.twoFolderListBox);
+            this.Controls.Add(this.folderListView);
+            this.Controls.Add(this.twoFolderListView);
             this.Controls.Add(this.headerLabel);
             this.Controls.Add(this.navBarPanel);
             this.Name = "Simple_explorer";
@@ -324,8 +333,8 @@ namespace simpleExplorer
         private System.Windows.Forms.Label headerLabel;
         private System.Windows.Forms.Button navBarHomeButton;
         private System.Windows.Forms.Button navBarFileButton;
-        private System.Windows.Forms.ListBox folderListBox;
-        private System.Windows.Forms.ListBox twoFolderListBox;
+        private System.Windows.Forms.ListView folderListView;
+        private System.Windows.Forms.ListView twoFolderListView;
         private System.Windows.Forms.Button navBarPrevButton;
         private System.Windows.Forms.Button navBarArchiveButton;
         private System.Windows.Forms.Button navBarUnpackButton;
@@ -333,5 +342,8 @@ namespace simpleExplorer
         private System.Windows.Forms.Button navBarCopyButton;
         private System.Windows.Forms.Button navBarPasteButton;
         private System.Windows.Forms.Button navBarDeleteButton;
+        private System.Windows.Forms.ImageList ImageIcons;
+        private System.Windows.Forms.ColumnHeader columnHeader1;
+        private System.Windows.Forms.ColumnHeader columnHeader2;
     }
 }
