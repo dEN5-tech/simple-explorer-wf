@@ -113,9 +113,6 @@ namespace simpleExplorer
             }
         }
 
-
-
-
         private void RenderListBoxContents(ListView listView, string path)
         {
             listView.Items.Clear(); // Clear existing items
