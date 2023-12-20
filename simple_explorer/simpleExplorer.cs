@@ -21,7 +21,7 @@ namespace simpleExplorer
 
 
 
-        private readonly string mainDirectory = @"C:\"; // Set your main directory here
+        private readonly string mainDirectory = @"C:\"; //базовая дирректория 
 
         public Simple_explorer()
         {
@@ -115,7 +115,7 @@ namespace simpleExplorer
 
         private void RenderListBoxContents(ListView listView, string path)
         {
-            listView.Items.Clear(); // Clear existing items
+            listView.Items.Clear(); // Очистить все элементы
 
             try
             {
@@ -125,8 +125,7 @@ namespace simpleExplorer
                 }
                 else
                 {
-                    // Continue with the logic for regular directories
-                    // Check if the directory exists
+                    // проверить есть ли дирректория
                     if (!Directory.Exists(path))
                     {
                         MessageBox.Show("Invalid directory path or insufficient permissions.");
@@ -136,7 +135,7 @@ namespace simpleExplorer
                     string[] directories = Directory.GetDirectories(path);
                     string[] files = Directory.GetFiles(path);
 
-                    // Add parent directory (if not root)
+                    // добавить родительскую дирректорию
                     if (path != mainDirectory)
                     {
                         string parentFolderName = Path.GetFileName(Path.GetDirectoryName(path));
@@ -144,7 +143,6 @@ namespace simpleExplorer
                         listView.Items.Add(new ListViewItem { Text = ".." + parentFolderName});
                     }
 
-                    // Add directories to the listBox with folder icon
                     foreach (string directory in directories)
                     {
                         string folderName = Path.GetFileName(directory);
@@ -152,7 +150,6 @@ namespace simpleExplorer
                         listView.Items.Add(new ListViewItem { Text = folderName});
                     }
 
-                    // Add files to the listBox with file icon
                     foreach (string file in files)
                     {
                         string fileName = Path.GetFileName(file);
@@ -163,7 +160,7 @@ namespace simpleExplorer
             }
             catch (UnauthorizedAccessException)
             {
-                MessageBox.Show("Insufficient permissions to access the directory or archive.");
+                MessageBox.Show("Ошибка доступа к дирректории или архиву.");
             }
             catch (Exception ex)
             {
@@ -171,10 +168,10 @@ namespace simpleExplorer
             }
         }
 
-        // Method to show the contents of a directory
+        // метод показа директорий
         private void ShowDirectoryContents(string path)
         {
-            lastSelectedListView.Items.Clear(); // Clear existing items
+            lastSelectedListView.Items.Clear(); 
 
             try
             {
@@ -184,8 +181,7 @@ namespace simpleExplorer
                 }
                 else
                 {
-                    // Continue with the logic for regular directories
-                    // Check if the directory exists
+
                     if (!Directory.Exists(path))
                     {
                         MessageBox.Show("Invalid directory path or insufficient permissions.");
@@ -195,7 +191,6 @@ namespace simpleExplorer
                     string[] directories = Directory.GetDirectories(path);
                     string[] files = Directory.GetFiles(path);
 
-                    // Add parent directory (if not root)
                     if (path != mainDirectory)
                     {
                         string parentFolderName = Path.GetFileName(Path.GetDirectoryName(path));
@@ -203,7 +198,6 @@ namespace simpleExplorer
                         lastSelectedListView.Items.Add(new ListViewItem { Text = ".." + parentFolderName});
                     }
 
-                    // Add directories to the lastSelectedListView with folder icon
                     foreach (string directory in directories)
                     {
                         string folderName = Path.GetFileName(directory);
@@ -211,7 +205,6 @@ namespace simpleExplorer
                         lastSelectedListView.Items.Add(new ListViewItem { Text = folderName});
                     }
 
-                    // Add files to the lastSelectedListView with file icon
                     foreach (string file in files)
                     {
                         string fileName = Path.GetFileName(file);
@@ -222,7 +215,7 @@ namespace simpleExplorer
             }
             catch (UnauthorizedAccessException)
             {
-                MessageBox.Show("Insufficient permissions to access the directory or archive.");
+                MessageBox.Show("Ошибка доступа к дирректории или архиву.");
             }
             catch (Exception ex)
             {
@@ -233,12 +226,11 @@ namespace simpleExplorer
 
         private bool IsZipArchive(string path)
         {
-            // Check if the file has a .zip extension
+            // проверить , являеться ли текущий файл архивом
             return string.Equals(Path.GetExtension(path), ".zip", StringComparison.OrdinalIgnoreCase);
         }
 
 
-        // Method to add files from an archive to the folderListBox
         private void AddFilesFromArchive(string archivePath)
         {
             try
@@ -247,13 +239,10 @@ namespace simpleExplorer
                 {
                     foreach (var entry in archive.Entries)
                     {
-                        // Combine the entry name with the original path to preserve folder structure
                         string entryName = Path.Combine(Path.GetFileNameWithoutExtension(archivePath), entry.FullName);
 
-                        // Ensure that the entry name is correctly formatted for the current platform
                         entryName = entryName.Replace(Path.DirectorySeparatorChar, Path.PathSeparator);
 
-                        Image entryIcon = GetIconImage(IconChar.File); // You may customize the icon
 
                         folderListView.Items.Add(new ListViewItem { Text = entryName});
                         twoFolderListView.Items.Add(new ListViewItem { Text = entryName});
@@ -266,37 +255,33 @@ namespace simpleExplorer
             }
         }
 
-        // Method to check if the file extension corresponds to a known archive extension
         private bool IsArchiveExtension(string extension)
         {
-            // Add more archive extensions if needed
             string[] archiveExtensions = { ".zip", ".rar", ".7z" };
 
             return archiveExtensions.Contains(extension, StringComparer.OrdinalIgnoreCase);
         }
 
 
-        // Event handler for the folder list draw item
 
-        // Method to get the icon image for a given FontAwesome icon
+        // метод получения базовой иконки для FontAwesome
         private Image GetIconImage(IconChar icon)
         {
-            int iconSize = 16; // Set the desired icon size
-            Color iconColor = Color.Black; // Set the desired icon color
+            int iconSize = 16; 
+            Color iconColor = Color.Black;
 
-            // Add padding to the icon if needed
+            // добавить отступ к иконке
             var iconWithPadding = AddPaddingToIcon(icon, iconSize, iconColor, 0, FlipOrientation.Normal, 2);
 
             return iconWithPadding;
         }
 
 
-        // Event handler for the Previous button click
+        // эвент нажатия кнопки назад
         private void OnPrevButtonClick(object sender, EventArgs e)
         {
             string currentPath = pathEntry.Text;
 
-            // Get the parent directory
             string parentDirectory = Directory.GetParent(currentPath)?.FullName;
 
             if (!string.IsNullOrEmpty(parentDirectory))
@@ -306,18 +291,17 @@ namespace simpleExplorer
             }
         }
 
-        // Event handler for the folder list selection change
+        //эвент выбора индекса из текущего listView
         private void OnFolderListSelectedIndexChanged(object sender, EventArgs e)
         {
             if (ctrlKeyPressed)
             {
-                // If Ctrl key is pressed, handle multiple item selection
-                // You may want to customize this behavior based on your requirements
+                //если зажат ctrl то устанавливаем множественный выбор
                 lastSelectedListView.MultiSelect = true;
             }
             else
             {
-                // If Ctrl key is not pressed, handle single item selection
+                //если не зажат ctrl то устанавливаем одиночный выбор
                 lastSelectedListView.MultiSelect = false;
             }
 
@@ -325,7 +309,7 @@ namespace simpleExplorer
             if (selectedIndex >= 0 && !ctrlKeyPressed)
             {
                 ListViewItem selectedItem = lastSelectedListView.SelectedItems[0];
-                string selectedDirectory = selectedItem.Text; // Assuming the first column contains the directory name
+                string selectedDirectory = selectedItem.Text; // выбираем первый столбец, он содержит имя директории
                 string currentPath = pathEntry.Text;
                 string newPath = Path.Combine(currentPath, selectedDirectory);
                 pathEntry.Text = newPath;
@@ -337,13 +321,12 @@ namespace simpleExplorer
         {
             if (ctrlKeyPressed)
             {
-                // If Ctrl key is pressed, handle multiple item selection
-                // You may want to customize this behavior based on your requirements
+                // ...
                 lastSelectedListView.MultiSelect = true;
             }
             else
             {
-                // If Ctrl key is not pressed, handle single item selection
+                // ...
                 lastSelectedListView.MultiSelect = false;
             }
 
@@ -351,7 +334,7 @@ namespace simpleExplorer
             if (selectedIndex >= 0 && !ctrlKeyPressed)
             {
                 ListViewItem selectedItem = lastSelectedListView.SelectedItems[0];
-                string selectedDirectory = selectedItem.Text; // Assuming the first column contains the directory name
+                string selectedDirectory = selectedItem.Text; // ...
                 string currentPath = pathEntry.Text;
                 string newPath = Path.Combine(currentPath, selectedDirectory);
                 pathEntry.Text = newPath;
@@ -360,25 +343,19 @@ namespace simpleExplorer
         }
 
 
-        // Event handler for the folder list key down
         private void OnFolderListKeyDown(object sender, KeyEventArgs e)
         {
-            // Check if Ctrl key is pressed
             ctrlKeyPressed = e.Control;
         }
 
-        // Event handler for the folder list key up
         private void OnFolderListKeyUp(object sender, KeyEventArgs e)
         {
             // Reset the Ctrl key state
             ctrlKeyPressed = false;
         }
 
-        // Event handler for the NavBarArchiveButton click
         private void OnNavBarArchiveButtonClick(object sender, EventArgs e)
         {
-            // Call your archive files logic here
-            // You can use folderListBox.SelectedItems to get the selected items
             if (lastSelectedListView.SelectedItems.Count > 0)
             {
                 // Prompt the user to select a destination for the zip file
@@ -388,19 +365,15 @@ namespace simpleExplorer
                     saveFileDialog.Title = "Сохранить архив";
                     if (saveFileDialog.ShowDialog() == DialogResult.OK)
                     {
-                        // Create a zip archive
                         using (var zipArchive = ZipFile.Open(saveFileDialog.FileName, ZipArchiveMode.Create))
                         {
                             foreach (var selectedItem in lastSelectedListView.SelectedItems)
                             {
-                                // Process each selected item
-                                // For example, you can get the title and add it to the zip archive
                                 string selectedText = ((ListViewItem)selectedItem).Text;
                                 string fullPath = Path.Combine(pathEntry.Text, selectedText);
 
                                 if (File.Exists(fullPath))
                                 {
-                                    // Add the file to the archive
                                     zipArchive.CreateEntryFromFile(fullPath, selectedText);
                                 }
                                 else if (Directory.Exists(fullPath))
@@ -408,7 +381,6 @@ namespace simpleExplorer
                                     {
                                         foreach (var file in Directory.GetFiles(fullPath, "*", SearchOption.AllDirectories))
                                         {
-                                            // Calculate the relative path inside the archive
                                             string relativePath = file.Substring(pathEntry.Text.Length + 1);
                                             zipArchive.CreateEntryFromFile(file, relativePath);
                                         }
@@ -429,29 +401,28 @@ namespace simpleExplorer
         }
 
 
-        // Event handler for the general Browse button click
         private void OnBrowseButtonClick(object sender, EventArgs e)
         {
             BrowseDirectory(sender, e);
         }
 
-        // Event handler for the form load
+        // эвент загрузки формы
         private void simple_explorer_Load(object sender, EventArgs e)
         {
             int headerHeight = headerLabel.Height;
             int navButtonHeight = navBarPanel.Height;
 
-            // Calculate the desired height for folderListBox
+            // высчитываем отступ для двух ListView
             int desiredHeight = headerHeight + navButtonHeight;
 
-            // Subtract the desired height from the total height of the form
+            //выбираем текущий размер для ListView
             int newHeight = this.Height - desiredHeight;
 
-            // Set the size and position of folderListBox
+            // устанавливаем позицию и размер для folderListView, 1/2 
             folderListView.Size = new System.Drawing.Size(this.Width / 2 - 10, newHeight - 20);
             folderListView.Location = new Point(0, headerHeight + navButtonHeight);
 
-            // Set the size and position of twoFolderListBox
+            //устанавливаем позицию и размер для twoFolderListView, 1/2
             twoFolderListView.Size = new System.Drawing.Size(this.Width / 2 - 10, newHeight - 20);
             twoFolderListView.Location = new Point(this.Width / 2, headerHeight + navButtonHeight);
 
@@ -468,63 +439,58 @@ namespace simpleExplorer
             folderListView.KeyDown += OnFolderListKeyDown;
             folderListView.KeyUp += OnFolderListKeyUp;
 
-            // Set up the icon image for the Home button
+            //устанавливаем все иконки который буду использовать
             var homeIcon = IconChar.Home;
             var fileIcon = IconChar.Folder;
             var prevIcon = IconChar.LeftLong;
             var archIcon = IconChar.FileZipper;
-            var unpackIcon = IconChar.FileDownload; // Add the unpack icon
+            var unpackIcon = IconChar.FileDownload;
             var copyIcon = IconChar.Copy;
             var pasteIcon = IconChar.Paste;
             var deleteIcon = IconChar.Remove;
 
 
-            // Add padding to icons and set them to corresponding buttons
+            // добавляем отступ для иконок относительно заголовка у кнопки
             var homeIconImage = AddPaddingToIcon(homeIcon, 15, Color.White, 0, FlipOrientation.Normal, 10);
             var fileIconImage = AddPaddingToIcon(fileIcon, 15, Color.White, 0, FlipOrientation.Normal, 10);
             var prevIconImage = AddPaddingToIcon(prevIcon, 15, Color.White, 0, FlipOrientation.Normal, 10);
             var archiveIconImage = AddPaddingToIcon(archIcon, 15, Color.White, 0, FlipOrientation.Normal, 10);
-            var unpackIconImage = AddPaddingToIcon(unpackIcon, 15, Color.White, 0, FlipOrientation.Normal, 10); // Create the unpack icon
-            var copyIconImage = AddPaddingToIcon(copyIcon, 15, Color.White, 0, FlipOrientation.Normal, 10); // Create the unpack icon
-            var pasteIconImage = AddPaddingToIcon(pasteIcon, 15, Color.White, 0, FlipOrientation.Normal, 10); // Create the unpack icon
-            var deleteIconImage = AddPaddingToIcon(deleteIcon, 15, Color.White, 0, FlipOrientation.Normal, 10); // Create the unpack icon
+            var unpackIconImage = AddPaddingToIcon(unpackIcon, 15, Color.White, 0, FlipOrientation.Normal, 10); 
+            var copyIconImage = AddPaddingToIcon(copyIcon, 15, Color.White, 0, FlipOrientation.Normal, 10); 
+            var pasteIconImage = AddPaddingToIcon(pasteIcon, 15, Color.White, 0, FlipOrientation.Normal, 10);
+            var deleteIconImage = AddPaddingToIcon(deleteIcon, 15, Color.White, 0, FlipOrientation.Normal, 10);
 
-            // Set the icon image for the Home button
+            // Установка изображения для кнопки
             navBarHomeButton.Image = homeIconImage;
-            // Set the icon image for the File button
             navBarFileButton.Image = fileIconImage;
-            // Set the icon image for the Prev button
             navBarPrevButton.Image = prevIconImage;
             navBarArchiveButton.Image = archiveIconImage;
-            // Set the icon image and text for the Unpack button
             navBarUnpackButton.Image = unpackIconImage;
 
             navBarCopyButton.Image = copyIconImage;
             navBarPasteButton.Image = pasteIconImage;
             navBarDeleteButton.Image = deleteIconImage;
 
-            navBarUnpackButton.Text = "Unpack"; // Set the appropriate text here
+            navBarUnpackButton.Text = "Unpack"; 
 
-            // Set the button text for the File button
-            navBarFileButton.Text = "Dir"; // Set the appropriate text here
-                                             // Set the button text for the Prev button
-            navBarPrevButton.Text = "Cancel"; // Set the appropriate text here
+            navBarFileButton.Text = "Dir";
+                                             
+            navBarPrevButton.Text = "Cancel";
             navBarArchiveButton.Text = "Achive";
             navBarCopyButton.Text = "Copy";
             navBarPasteButton.Text = "paste";
             navBarDeleteButton.Text = "Delete";
 
 
-            // Set the main directory when the form loads
             pathEntry.Text = mainDirectory;
             RenderListBoxContents(folderListView, mainDirectory);
             RenderListBoxContents(twoFolderListView, mainDirectory);
 
-            // Align icon and text in the buttons
+            // устанавливаем направление
             navBarHomeButton.TextImageRelation = TextImageRelation.ImageBeforeText;
             navBarFileButton.TextImageRelation = TextImageRelation.ImageBeforeText;
             navBarPrevButton.TextImageRelation = TextImageRelation.ImageBeforeText;
-            navBarUnpackButton.TextImageRelation = TextImageRelation.ImageBeforeText; // Align icon and text
+            navBarUnpackButton.TextImageRelation = TextImageRelation.ImageBeforeText;
             navBarArchiveButton.TextImageRelation = TextImageRelation.ImageBeforeText;
             navBarCopyButton.TextImageRelation = TextImageRelation.ImageBeforeText;
             navBarPasteButton.TextImageRelation = TextImageRelation.ImageBeforeText;
@@ -534,18 +500,18 @@ namespace simpleExplorer
 
 
 
-        // Method to add padding to an icon
+        // Метод добавление отступа
         private Bitmap AddPaddingToIcon(IconChar icon, int size, Color color, double rotation, FlipOrientation flip, int padding)
         {
-            // Get the original icon bitmap
+            //получаем битмеп
             var originalIcon = icon.ToBitmap(IconFont.Auto, size, color, rotation, flip);
 
-            // Create a new bitmap with padding
+            // добавляем к битмепу отступ
             var iconWithPadding = new Bitmap(originalIcon.Width + padding, originalIcon.Height);
 
             using (var graphics = Graphics.FromImage(iconWithPadding))
             {
-                // Draw the original icon onto the new bitmap with padding
+                // рендерим битмем вместе с прямоугольником
                 graphics.DrawImage(originalIcon, new Rectangle(padding, 0, originalIcon.Width, originalIcon.Height));
             }
 
@@ -559,11 +525,9 @@ namespace simpleExplorer
 
         private void OnNavBarUnpackButtonClick(object sender, EventArgs e)
         {
-            // Call your unpack logic here
-            // You can use folderListBox.SelectedItems to get the selected items
+
             if (lastSelectedListView.SelectedItems.Count > 0)
             {
-                // Prompt the user to select a destination for the unpacked files
                 using (var folderDialog = new FolderBrowserDialog())
                 {
                     folderDialog.Description = "Выберите папку для распаковки файлов";
@@ -573,14 +537,13 @@ namespace simpleExplorer
 
                         foreach (var selectedItem in lastSelectedListView.SelectedItems)
                         {
-                            // Process each selected item
-                            // For example, you can get the title and extract it to the destination folder
+                            // процедура выбора каждого элемента в listView
                             string selectedText = ((ListViewItem)selectedItem).Text;
                             string fullPath = Path.Combine(pathEntry.Text, selectedText);
 
                             if (IsZipArchive(fullPath))
                             {
-                                // If the selected item is a zip archive, extract its contents
+                                // если это архив получаем полный путь
                                 string extractFolder = Path.Combine(destinationFolder, Path.GetFileNameWithoutExtension(selectedText));
 
                                 try
@@ -594,18 +557,18 @@ namespace simpleExplorer
                             }
                             else
                             {
-                                // If it's not a zip archive, copy or move the item to the destination folder
+                                //если не архивб файл
                                 if (File.Exists(fullPath))
                                 {
-                                    // Copy or move the file to the destination folder
+                                    // купируем файл
                                     string destinationPath = Path.Combine(destinationFolder, selectedText);
-                                    File.Copy(fullPath, destinationPath, true); // Use File.Move if you want to move instead of copy
+                                    File.Copy(fullPath, destinationPath, true);
                                 }
                                 else if (Directory.Exists(fullPath))
                                 {
-                                    // Copy or move the entire directory to the destination folder
+                                    // копируем директорию
                                     string destinationPath = Path.Combine(destinationFolder, selectedText);
-                                    CopyDirectory(fullPath, destinationPath); // Implement CopyDirectory method
+                                    CopyDirectory(fullPath, destinationPath); 
                                 }
                             }
                         }
@@ -621,7 +584,7 @@ namespace simpleExplorer
         }
 
 
-        // Method to copy a directory and its contents recursively
+        // метод копирования директории ввиде проверки есть ли в каждой директории папки
         private void CopyDirectory(string sourcePath, string destinationPath)
         {
             Directory.CreateDirectory(destinationPath);
@@ -643,7 +606,7 @@ namespace simpleExplorer
 
         private void OnNavBarCopyButtonClick(object sender, EventArgs e)
         {
-            // Copy the selected items in lastSelectedListView to the clipboard
+            // копируем в буфер обмена  пути
             clipboardPaths.Clear();
             foreach (var selectedItem in lastSelectedListView.SelectedItems)
             {
@@ -658,7 +621,7 @@ namespace simpleExplorer
 
         private void OnNavBarPasteButtonClick(object sender, EventArgs e)
         {
-                // Paste the copied items from the clipboard to the selected directory in lastSelectedListView
+                // вставляем из буфера все файлы или папки
                 string destinationDirectory = pathEntry.Text;
 
                 if (clipboardPaths.Count > 0)
@@ -669,15 +632,15 @@ namespace simpleExplorer
                         {
                             if (File.Exists(copiedPath))
                             {
-                                // Copy the file to the destination folder
+                                
                                 string destinationPath = Path.Combine(destinationDirectory, Path.GetFileName(copiedPath));
-                                File.Copy(copiedPath, destinationPath, true); // Use File.Move if you want to move instead of copy
+                                File.Copy(copiedPath, destinationPath, true); 
                             }
                             else if (Directory.Exists(copiedPath))
                             {
-                                // Copy the entire directory to the destination folder
+                                
                                 string destinationPath = Path.Combine(destinationDirectory, Path.GetFileName(copiedPath));
-                                CopyDirectory(copiedPath, destinationPath); // Implement CopyDirectory method
+                                CopyDirectory(copiedPath, destinationPath); 
                             }
                         }
                         catch (Exception ex)
@@ -686,16 +649,14 @@ namespace simpleExplorer
                         }
                     }
 
-                    // Optionally, display a message to indicate successful paste
                     MessageBox.Show("Файлы и папки успешно вставлены.");
                 }
                 else
                 {
-                    // Optionally, display a message if the clipboard is empty
                     MessageBox.Show("Буфер обмена пуст.");
                 }
 
-                // Refresh the contents of lastSelectedListView after pasting
+                // перезагрузка ListView
                 ShowDirectoryContents(destinationDirectory);
             }
 
