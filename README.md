@@ -1,6 +1,6 @@
 Простой файловый проводник на C# с использованием Windows Forms
 ===============================================================
-![](./wA12qMT6sZ.gif)
+![](./uocvDZ1uVD.gif)
 
 [Отчет о проделанной работе](https://github.com/dEN5-tech/simple-explorer-wf/raw/main/otch.odt)
 
