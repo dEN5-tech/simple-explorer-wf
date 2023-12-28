@@ -34,10 +34,10 @@ namespace simpleExplorer
 
         private void Simple_explorer_Resize(object sender, EventArgs e)
         {
-            // Adjust the maximum width based on the form size
+            // Установка макс размера ox панели по размеру окна
             int maxPanelWidth = this.ClientSize.Width;
 
-            // Set the maximum width of the navBarPanel
+            // передача макс размера для установки скролла
             this.navBarPanel.MaximumSize = new System.Drawing.Size(maxPanelWidth, this.navBarPanel.Height);
             this.navBarPanel.Width = this.ClientSize.Width;
             this.headerLabel.Width = this.ClientSize.Width;
@@ -45,17 +45,17 @@ namespace simpleExplorer
             int headerHeight = headerLabel.Height;
             int navButtonHeight = navBarPanel.Height;
 
-            // Calculate the desired height for folderListBox
+            // вычисление общего отступа 
             int desiredHeight = headerHeight + navButtonHeight;
 
-            // Subtract the desired height from the total height of the form
+            // вычисление размера с отступом
             int newHeight = this.Height - desiredHeight;
 
-            // Set the size and position of folderListBox
+            // позиция и размер относительно отступа
             folderListView.Size = new System.Drawing.Size(this.Width / 2 - 10, newHeight - 20);
             folderListView.Location = new Point(0, headerHeight + navButtonHeight);
 
-            // Set the size and position of twoFolderListBox
+            //позиция и размер относительно отступа
             twoFolderListView.Size = new System.Drawing.Size(this.Width / 2 - 10, newHeight - 20);
             twoFolderListView.Location = new Point(this.Width / 2, headerHeight + navButtonHeight);
 
@@ -74,7 +74,7 @@ namespace simpleExplorer
         }
 
 
-        // Event handler for browsing directories
+        // эвент навигации директорий
         private void BrowseDirectory(object sender, EventArgs e)
         {
             using (var folderDialog = new FolderBrowserDialog())
@@ -88,7 +88,7 @@ namespace simpleExplorer
             }
         }
 
-        // Event handler for double-clicking on a listbox item
+        // эвент двойного нажатия на элемент ListView
         private void OnListViewDoubleClick(object sender, EventArgs e)
         {
             if (lastSelectedListView != null)
@@ -96,10 +96,10 @@ namespace simpleExplorer
                 int selectedIndex = lastSelectedListView.SelectedIndices.Count > 0 ? lastSelectedListView.SelectedIndices[0] : -1;
                 if (selectedIndex >= 0)
                 {
-                    // Assuming the first column contains the directory name
+
                     string selectedDirectory = lastSelectedListView.Items[selectedIndex].SubItems[0].Text;
 
-                    // Check if the selected item is of type ListViewItem
+
                     if (lastSelectedListView.Items[selectedIndex].Tag is ListViewItem selectedItem)
                     {
                         selectedDirectory = selectedItem.Text;
@@ -226,7 +226,7 @@ namespace simpleExplorer
 
         private bool IsZipArchive(string path)
         {
-            // проверить , являеться ли текущий файл архивом
+            // проверить , является ли текущий файл архивом
             return string.Equals(Path.GetExtension(path), ".zip", StringComparison.OrdinalIgnoreCase);
         }
 
@@ -557,10 +557,10 @@ namespace simpleExplorer
                             }
                             else
                             {
-                                //если не архивб файл
+                                //если не архив файл
                                 if (File.Exists(fullPath))
                                 {
-                                    // купируем файл
+                                    // копируем файл
                                     string destinationPath = Path.Combine(destinationFolder, selectedText);
                                     File.Copy(fullPath, destinationPath, true);
                                 }
@@ -584,7 +584,7 @@ namespace simpleExplorer
         }
 
 
-        // метод копирования директории ввиде проверки есть ли в каждой директории папки
+        // метод копирования директории в виде проверки есть ли в каждой директории папки
         private void CopyDirectory(string sourcePath, string destinationPath)
         {
             Directory.CreateDirectory(destinationPath);
@@ -615,7 +615,7 @@ namespace simpleExplorer
                 clipboardPaths.Add(fullPath);
             }
 
-            // Optionally, display a message to indicate successful copy
+
             MessageBox.Show("Выбранные файлы и папки скопированы в буфер обмена.");
         }
 
